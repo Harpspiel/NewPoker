@@ -19,11 +19,23 @@ class BestHandIdentifier
         foreach ($CardsGroupedBySuits as $SuitCards) {
             if (count($SuitCards) >= 5) {
                 $SuitCards = $this->_getSortedCards($SuitCards);
+                $NonConsecutiveCards = $SuitCards;
                 $LowestCard = $SuitCards[4];
                 if ($LowestCard->getFaceValue() == 10) {
                     return new RoyalFlush(array_slice($SuitCards, 0, 5));
+                }
+                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+                }
+                array_shift($SuitCards);
+                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+                }
+                array_shift($SuitCards);
+                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
                 } else {
-                    return new Flush(array_slice($SuitCards, 0, 5));
+                    return new Flush(array_slice($NonConsecutiveCards, 0, 5));
                 }
             }
         }

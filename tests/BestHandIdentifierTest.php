@@ -60,15 +60,15 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('A-S', 'J-C', '7-C', '5-D', '4-S');
     }
 
-//    public function testWillGetStraightFlush()
-//    {
-//        $this->_theSevenCardsAre('2-H', '6-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
-//
-//        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-//
-//        $this->assertType('StraightFlush', $this->_Hand);
-//        $this->_theBestHandShouldContain('6-S', '7-S', '5-S', '4-S', '3-S');
-//    }
+    public function testWillGetStraightFlush()
+    {
+        $this->_theSevenCardsAre('2-H', '6-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
+
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('StraightFlush', $this->_Hand);
+        $this->_theBestHandShouldContain('6-S', '7-S', '5-S', '4-S', '3-S');
+    }
 
     public function testWillGetRoyalFlush()
     {
