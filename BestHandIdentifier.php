@@ -23,42 +23,42 @@ class BestHandIdentifier
                 $LowestCard = $SuitCards[4];
                 if ($LowestCard->getFaceValue() == 10) {
                     return new RoyalFlush(array_slice($SuitCards, 0, 5));
-//                }
-//                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
-//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-//                }
-//                array_shift($SuitCards);
-//                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-//                }
-//                array_shift($SuitCards);
-//                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+                }
+                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+                }
+                array_shift($SuitCards);
+                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+                }
+                array_shift($SuitCards);
+                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+                    return new StraightFlush(array_slice($SuitCards, 0, 5));
                 } else {
                     return new Flush(array_slice($NonConsecutiveCards, 0, 5));
                 }
             }
         }
 
-//        if (count($CardsGroupedByValues) >= 5) {
-//            krsort($CardsGroupedByValues);
-//            $BestSuitPerValue = array();
-//            foreach ($CardsGroupedByValues as $Cards) {
-//                $Cards = $this->_getSortedCards($Cards);
-//                $BestSuitPerValue[] = $Cards[0];
-//            }
-//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-//                return new Straight(array_slice($BestSuitPerValue, 0, 5));
-//            }
-//            array_shift($BestSuitPerValue);
-//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-//              return new Straight(array_slice($BestSuitPerValue, 0, 5));
-//            }
-//            array_shift($BestSuitPerValue);
-//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-//              return new Straight(array_slice($BestSuitPerValue, 0, 5));
-//            }
-//        }
+        if (count($CardsGroupedByValues) >= 5) {
+            krsort($CardsGroupedByValues);
+            $BestSuitPerValue = array();
+            foreach ($CardsGroupedByValues as $Cards) {
+                $Cards = $this->_getSortedCards($Cards);
+                $BestSuitPerValue[] = $Cards[0];
+            }
+            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+                return new Straight(array_slice($BestSuitPerValue, 0, 5));
+            }
+            array_shift($BestSuitPerValue);
+            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+              return new Straight(array_slice($BestSuitPerValue, 0, 5));
+            }
+            array_shift($BestSuitPerValue);
+            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+              return new Straight(array_slice($BestSuitPerValue, 0, 5));
+            }
+        }
 
         foreach ($CardsGroupedByValues as $faceValue => $Cards) {
             if (count($Cards) == 4) {
