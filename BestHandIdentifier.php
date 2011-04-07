@@ -90,13 +90,15 @@ class BestHandIdentifier
             }
         }
 
-        foreach ($CardsGroupedByValues as $Cards) {
+        $CardsRemaining = $CardsGroupedByValues;
+        foreach ($CardsRemaining as $faceValue => $Cards) {
             if (count($Cards) == 2) {
                 $Cards = $this->_getSortedCards($Cards);
-                foreach ($CardsGroupedByValues as $faceValue => $InnerCards) {
+                unset ($CardsRemaining[$faceValue]);
+                foreach ($CardsRemaining as $faceValue => $InnerCards) {
                     if (count($InnerCards) == 2) {
                         $InnerCards = $this->_getSortedCards($InnerCards);
-                        $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsGroupedByValues);
+                        $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsRemaining);
                         list($Kicker1) = $this->_getSortedCards($CardsNotOfValue);
                         return new TwoPair(array_merge($Cards, $InnerCards, array($Kicker1)));
                     }
