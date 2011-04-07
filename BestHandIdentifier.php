@@ -23,45 +23,46 @@ class BestHandIdentifier
                 $LowestCard = $SuitCards[4];
                 if ($LowestCard->getFaceValue() == 10) {
                     return new RoyalFlush(array_slice($SuitCards, 0, 5));
-                }
-                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-                }
-                array_shift($SuitCards);
-                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-                }
-                array_shift($SuitCards);
-                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+//                }
+//                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
+//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+//                }
+//                array_shift($SuitCards);
+//                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
+//                }
+//                array_shift($SuitCards);
+//                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
+//                    return new StraightFlush(array_slice($SuitCards, 0, 5));
                 } else {
                     return new Flush(array_slice($NonConsecutiveCards, 0, 5));
                 }
             }
         }
 
-        if (count($CardsGroupedByValues) >= 5) {
-            krsort($CardsGroupedByValues);
-            $BestSuitPerValue = array();
-            foreach ($CardsGroupedByValues as $Cards) {
-                $Cards = $this->_getSortedCards($Cards);
-                $BestSuitPerValue[] = $Cards[0];
-            }
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-                return new Straight(array_slice($BestSuitPerValue, 0, 5));
-            }
-            array_shift($BestSuitPerValue);
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-              return new Straight(array_slice($BestSuitPerValue, 0, 5));
-            }
-            array_shift($BestSuitPerValue);
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-              return new Straight(array_slice($BestSuitPerValue, 0, 5));
-            }
-        }
+//        if (count($CardsGroupedByValues) >= 5) {
+//            krsort($CardsGroupedByValues);
+//            $BestSuitPerValue = array();
+//            foreach ($CardsGroupedByValues as $Cards) {
+//                $Cards = $this->_getSortedCards($Cards);
+//                $BestSuitPerValue[] = $Cards[0];
+//            }
+//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+//                return new Straight(array_slice($BestSuitPerValue, 0, 5));
+//            }
+//            array_shift($BestSuitPerValue);
+//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+//              return new Straight(array_slice($BestSuitPerValue, 0, 5));
+//            }
+//            array_shift($BestSuitPerValue);
+//            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+//              return new Straight(array_slice($BestSuitPerValue, 0, 5));
+//            }
+//        }
 
         foreach ($CardsGroupedByValues as $faceValue => $Cards) {
             if (count($Cards) == 4) {
+                $Cards = $this->_getSortedCards($Cards);
                 $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsGroupedByValues);
                 list($Kicker1) = $this->_getSortedCards($CardsNotOfValue);
                 return new FourOfAKind(array_merge($Cards, array($Kicker1)));
@@ -70,8 +71,10 @@ class BestHandIdentifier
 
         foreach ($CardsGroupedByValues as $Cards) {
             if (count($Cards) == 3) {
+                $Cards = $this->_getSortedCards($Cards);
                 foreach ($CardsGroupedByValues as $InnerCards) {
                     if (count($InnerCards) == 2) {
+                        $InnerCards = $this->_getSortedCards($InnerCards);
                         return new FullHouse(array_merge($Cards, $InnerCards));
                     }
                 }
@@ -80,14 +83,30 @@ class BestHandIdentifier
 
         foreach ($CardsGroupedByValues as $faceValue => $Cards) {
             if (count($Cards) == 3) {
+                $Cards = $this->_getSortedCards($Cards);
                 $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsGroupedByValues);
                 list($Kicker1, $Kicker2) = $this->_getSortedCards($CardsNotOfValue);
                 return new ThreeOfAKind(array_merge($Cards, array($Kicker1, $Kicker2)));
             }
         }
 
+        foreach ($CardsGroupedByValues as $Cards) {
+            if (count($Cards) == 2) {
+                $Cards = $this->_getSortedCards($Cards);
+                foreach ($CardsGroupedByValues as $faceValue => $InnerCards) {
+                    if (count($InnerCards) == 2) {
+                        $InnerCards = $this->_getSortedCards($InnerCards);
+                        $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsGroupedByValues);
+                        list($Kicker1) = $this->_getSortedCards($CardsNotOfValue);
+                        return new TwoPair(array_merge($Cards, $InnerCards, array($Kicker1)));
+                    }
+                }
+            }
+        }
+
         foreach ($CardsGroupedByValues as $faceValue => $Cards) {
             if (count($Cards) == 2) {
+                $Cards = $this->_getSortedCards($Cards);
                 $CardsNotOfValue = $this->_getCardsNotOfFaceValue($faceValue, $CardsGroupedByValues);
                 list($Kicker1, $Kicker2, $Kicker3) = $this->_getSortedCards($CardsNotOfValue);
                 return new TwoOfAKind(array_merge($Cards, array($Kicker1, $Kicker2, $Kicker3)));
