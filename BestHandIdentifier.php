@@ -24,19 +24,11 @@ class BestHandIdentifier
                 if ($LowestCard->getFaceValue() == 10) {
                     return new RoyalFlush(array_slice($SuitCards, 0, 5));
                 }
-                if($this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-                }
-                array_shift($SuitCards);
-                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-                }
-                array_shift($SuitCards);
-                if (count($SuitCards) >= 5 && $this->_areNextFiveCardsConsecutive($SuitCards)) {
-                    return new StraightFlush(array_slice($SuitCards, 0, 5));
-                } else {
-                    return new Flush(array_slice($NonConsecutiveCards, 0, 5));
-                }
+                while (count($SuitCards) >= 5) {
+                    if ($this->_areNextFiveCardsConsecutive($SuitCards)) {
+                        return new StraightFlush(array_slice($SuitCards, 0, 5));
+                    } else array_shift($SuitCards);
+                } return new Flush(array_slice($NonConsecutiveCards, 0, 5));
             }
         }
 
@@ -47,16 +39,10 @@ class BestHandIdentifier
                 $Cards = $this->_getSortedCards($Cards);
                 $BestSuitPerValue[] = $Cards[0];
             }
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-                return new Straight(array_slice($BestSuitPerValue, 0, 5));
-            }
-            array_shift($BestSuitPerValue);
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-              return new Straight(array_slice($BestSuitPerValue, 0, 5));
-            }
-            array_shift($BestSuitPerValue);
-            if (count($BestSuitPerValue) >= 5 && $this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
-              return new Straight(array_slice($BestSuitPerValue, 0, 5));
+            while (count($BestSuitPerValue) >= 5) {
+                if ($this->_areNextFiveCardsConsecutive($BestSuitPerValue)) {
+                    return new Straight(array_slice($BestSuitPerValue, 0, 5));
+                } else array_shift($BestSuitPerValue);
             }
         }
 
@@ -139,18 +125,12 @@ class BestHandIdentifier
     private function _areNextFiveCardsConsecutive(array $CardArray)
     {
         $FirstCard =  $CardArray[0];
-        $SecondCard = $CardArray[1];
-        $ThirdCard =  $CardArray[2];
-        $FourthCard = $CardArray[3];
         $FifthCard =  $CardArray[4];
         return
-            ($SecondCard->getFaceValue() == ($FirstCard->getFaceValue() -1) &&
-            $ThirdCard->getFaceValue() == ($FirstCard->getFaceValue() -2) &&
-            $FourthCard->getFaceValue() == ($FirstCard->getFaceValue() -3) &&
-            $FifthCard->getFaceValue() == ($FirstCard->getFaceValue() -4));
+            ($FifthCard->getFaceValue() == ($FirstCard->getFaceValue() -4));
     }
 
-    public static function compareCards(Card $Card1, Card $Card2)
+     public static function compareCards(Card $Card1, Card $Card2)
     {
         if ($Card1->getFaceValue() == $Card2->getFaceValue()) {
             return ($Card1->getSuitValue() > $Card2->getSuitValue()) ? -1 : 1;
