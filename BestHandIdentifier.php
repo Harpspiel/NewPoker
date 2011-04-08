@@ -118,7 +118,7 @@ class BestHandIdentifier
 
     private function _getSortedCards($UnsortedCardArray)
     {
-        usort($UnsortedCardArray, 'self::compareCards');
+        usort($UnsortedCardArray, 'CardRanker::compareCards');
         return $UnsortedCardArray;
     }
 
@@ -128,13 +128,5 @@ class BestHandIdentifier
         $FifthCard =  $CardArray[4];
         return
             ($FifthCard->getFaceValue() == ($FirstCard->getFaceValue() -4));
-    }
-
-     public static function compareCards(Card $Card1, Card $Card2)
-    {
-        if ($Card1->getFaceValue() == $Card2->getFaceValue()) {
-            return ($Card1->getSuitValue() > $Card2->getSuitValue()) ? -1 : 1;
-        }
-        return ($Card1->getFaceValue() > $Card2->getFaceValue()) ? -1 : 1;
     }
 }

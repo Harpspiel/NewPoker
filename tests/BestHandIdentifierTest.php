@@ -20,47 +20,8 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_HandIdentifier = new BestHandIdentifier();
     }
 
-    public function testWillGetTwoOfAKind()
-    {
-        $this->_theSevenCardsAre('A-H', 'A-S', '7-C', '5-D', '4-S', '2-H', 'J-C');
-        
-        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-
-        $this->assertType('TwoOfAKind', $this->_Hand);
-        $this->_theBestHandShouldContain('A-S', 'A-H', 'J-C', '7-C', '5-D');
-    }
-
-    public function testWillGetTwoOfAKindWithADifferentPair()
-    {
-        $this->_theSevenCardsAre('A-S', '7-C', '7-H', '5-D', '4-S', '2-H', 'J-C');
-
-        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-
-        $this->assertType('TwoOfAKind', $this->_Hand);
-        $this->_theBestHandShouldContain('7-H', '7-C', 'A-S', 'J-C', '5-D');
-    }
-
-    public function testWillGetTwoPair()
-    {
-        $this->_theSevenCardsAre('7-S', '7-H', '5-C', '5-D', '4-S', '2-H', 'J-C');
-
-        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-
-        $this->assertType('TwoPair', $this->_Hand);
-        $this->_theBestHandShouldContain('7-S', '7-H', '5-C', '5-D', 'J-C');
-    }
-
-    public function testWillGetThreeOfAKind()
-    {
-        $this->_theSevenCardsAre('7-S', '7-C', '7-H', '5-D', '4-S', '2-H', 'J-C');
-
-        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-
-        $this->assertType('ThreeOfAKind', $this->_Hand);
-        $this->_theBestHandShouldContain('7-S', '7-H', '7-C', 'J-C', '5-D');
-    }
-
-    public function testWillGetJustAHighCard()
+// High Card //
+    public function testHighCard()
     {
         $this->_theSevenCardsAre('A-S', '3-H', '7-C', '5-D', '4-S', '2-H', 'J-C');
 
@@ -70,47 +31,62 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('A-S', 'J-C', '7-C', '5-D', '4-S');
     }
 
-    public function testWillGetStraightFlush()
+// Two of a kind //
+    public function testTwoOfAKind1()
     {
-        $this->_theSevenCardsAre('2-H', '6-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
+        $this->_theSevenCardsAre('A-H', 'A-S', '7-C', '5-D', '4-S', '2-H', 'J-C');
+        
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('TwoOfAKind', $this->_Hand);
+        $this->_theBestHandShouldContain('A-S', 'A-H', 'J-C', '7-C', '5-D');
+    }
+
+    public function testTwoOfAKind2()
+    {
+        $this->_theSevenCardsAre('A-S', '7-C', '7-H', '5-D', '4-S', '2-H', 'J-C');
 
         $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
 
-        $this->assertType('StraightFlush', $this->_Hand);
-        $this->_theBestHandShouldContain('7-S', '6-S', '5-S', '4-S', '3-S');
+        $this->assertType('TwoOfAKind', $this->_Hand);
+        $this->_theBestHandShouldContain('7-H', '7-C', 'A-S', 'J-C', '5-D');
     }
 
-    public function testWillGetRoyalFlush()
+// Two Pair //
+    public function testTwoPair()
     {
-        $this->_theSevenCardsAre('2-H', 'A-S', 'K-S', 'Q-S', 'J-S', '10-S', 'J-C');
+        $this->_theSevenCardsAre('7-S', '7-H', '5-C', '5-D', '4-S', '2-H', 'J-C');
 
         $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
 
-        $this->assertType('RoyalFlush', $this->_Hand);
-        $this->_theBestHandShouldContain('A-S', 'K-S', 'Q-S', 'J-S', '10-S');
+        $this->assertType('TwoPair', $this->_Hand);
+        $this->_theBestHandShouldContain('7-S', '7-H', '5-C', '5-D', 'J-C');
     }
 
-    public function testWillGetFlush()
+// Three of a kind //
+    public function testThreeOfAKind()
     {
-        $this->_theSevenCardsAre('2-H', 'A-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
+        $this->_theSevenCardsAre('7-S', '7-C', '7-H', '5-D', '4-S', '2-H', 'J-C');
 
         $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
 
-        $this->assertType('Flush', $this->_Hand);
-        $this->_theBestHandShouldContain('A-S', '7-S', '5-S', '4-S', '3-S');
+        $this->assertType('ThreeOfAKind', $this->_Hand);
+        $this->_theBestHandShouldContain('7-S', '7-H', '7-C', 'J-C', '5-D');
     }
 
-    public function testWillGetSixCardsSameSuit()
+// Full House //
+    public function testFullHouse()
     {
-        $this->_theSevenCardsAre('A-S', '3-S', '7-S', '5-S', '4-S', '2-S', 'J-C');
+        $this->_theSevenCardsAre('A-H', 'A-S', 'A-C', '5-D', '5-S', '2-H', 'J-C');
 
         $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
 
-        $this->assertType('Flush', $this->_Hand);
-        $this->_theBestHandShouldContain('A-S', '7-S', '5-S', '4-S', '3-S');
+        $this->assertType('FullHouse', $this->_Hand);
+        $this->_theBestHandShouldContain('A-S', 'A-H', 'A-C', '5-S', '5-D');
     }
 
-    public function testWillGetFourOfAKind()
+// Four of a kind //
+    public function testFourOfAKind()
     {
         // Setup
         $this->_theSevenCardsAre('A-S', '4-S', 'A-C', 'A-D', 'A-H', '2-H', 'J-C');
@@ -123,17 +99,8 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('A-S', 'A-H', 'A-C', 'A-D', 'J-C');
     }
 
-    public function testWillGetFullHouse()
-    {
-        $this->_theSevenCardsAre('A-H', 'A-S', 'A-C', '5-D', '5-S', '2-H', 'J-C');
-
-        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
-
-        $this->assertType('FullHouse', $this->_Hand);
-        $this->_theBestHandShouldContain('A-S', 'A-H', 'A-C', '5-S', '5-D');
-    }
-
-    public function testWillGetStraight1()
+// Straight //
+    public function testStraight1()
     {
         $this->_theSevenCardsAre('2-H', 'A-S', 'K-H', 'J-C', 'Q-D', '10-S', 'J-S');
 
@@ -143,7 +110,7 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('A-S', 'K-H', 'Q-D', 'J-S', '10-S');
     }
 
-    public function testWillGetStraight2()
+    public function testStraight2()
     {
         $this->_theSevenCardsAre('A-S', '10-H', '9-C', '8-D', '7-S', '6-H', '3-C');
 
@@ -153,7 +120,7 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('10-H', '9-C', '8-D', '7-S', '6-H');
     }
 
-    public function testWillGetStraight3()
+    public function testStraight3()
     {
         $this->_theSevenCardsAre('A-S', 'K-H', '7-C', '6-D', '5-S', '4-H', '3-C');
 
@@ -163,6 +130,50 @@ class BestHandIdentifierTest extends PHPUnit_Framework_TestCase
         $this->_theBestHandShouldContain('7-C', '6-D', '5-S', '4-H', '3-C');
     }
 
+// Flush //
+    public function testFlush()
+    {
+        $this->_theSevenCardsAre('2-H', 'A-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
+
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('Flush', $this->_Hand);
+        $this->_theBestHandShouldContain('A-S', '7-S', '5-S', '4-S', '3-S');
+    }
+
+    public function testSixCardsSameSuit()
+    {
+        $this->_theSevenCardsAre('A-S', '3-S', '7-S', '5-S', '4-S', '2-S', 'J-C');
+
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('Flush', $this->_Hand);
+        $this->_theBestHandShouldContain('A-S', '7-S', '5-S', '4-S', '3-S');
+    }
+
+// Straight Flush //
+    public function testStraightFlush()
+    {
+        $this->_theSevenCardsAre('2-H', '6-S', '3-S', '7-S', '5-S', '4-S', 'J-C');
+
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('StraightFlush', $this->_Hand);
+        $this->_theBestHandShouldContain('7-S', '6-S', '5-S', '4-S', '3-S');
+    }
+
+// Royal Flush //
+    public function testRoyalFlush()
+    {
+        $this->_theSevenCardsAre('2-H', 'A-S', 'K-S', 'Q-S', 'J-S', '10-S', 'J-C');
+
+        $this->_Hand = $this->_HandIdentifier->identify($this->_Hole, $this->_Community);
+
+        $this->assertType('RoyalFlush', $this->_Hand);
+        $this->_theBestHandShouldContain('A-S', 'K-S', 'Q-S', 'J-S', '10-S');
+    }
+
+// Private Functions //
     private function _theSevenCardsAre()
     {
         $cards = func_get_args();
